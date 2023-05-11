@@ -4,6 +4,7 @@ CXXFLAGS	:=-std=c++17 -Wall -fno-exceptions
 LDFLAGS		:=
 BINARY		:=plush
 SOURCEDIR	:=plush
+INCLUDEDIR	:=plush
 BUILDDIR	:=build
 HEADERS		:=$(shell find $(SOURCEDIR) -name '*.h')
 SOURCES		:=$(shell find $(SOURCEDIR) -name '*.cpp')
@@ -16,7 +17,7 @@ release:	build
 
 $(BUILDDIR)/%.o: $(SOURCEDIR)/%.cpp
 	@mkdir -p $(@D)
-	$(CXX) $(CXXFLAGS) $(LDFLAGS) -c $< -o $@
+	$(CXX) $(CXXFLAGS) $(LDFLAGS) -I$(INCLUDEDIR) -c $< -o $@
 
 $(BUILDDIR)/$(BINARY): $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $(LDFLAGS) $(OBJECTS) -o $(BUILDDIR)/$(BINARY)
