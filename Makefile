@@ -1,6 +1,6 @@
 CXX		:=clang++
 CLANGFORMAT	:=clang-format
-CXXFLAGS	:=-std=c++17 -Wall 
+CXXFLAGS	:=-std=c++17 -Wall -fno-exceptions 
 LDFLAGS		:=
 BINARY		:=plush
 SOURCEDIR	:=plush
