@@ -55,7 +55,8 @@ public:
 
  // Take ownership of the contained error value.
  template <class E = Error>
- std::enable_if_t<std::is_base_of_v<Error, E>, std::unique_ptr<E>> takeError() {
+ [[nodiscard]] std::enable_if_t<std::is_base_of_v<Error, E>, std::unique_ptr<E>>
+ takeError() {
   assert(isError());
   return *std::get_if<std::unique_ptr<Error>>(&mVariant);
  }
