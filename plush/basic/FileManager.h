@@ -43,9 +43,9 @@ class FileManager final {
 
 public:
  FileManager();
- FileManager(FileManager &&);
- // Forbid copying and/or moving to avoid invalidating FileInfo pointers when
- // destructing.
+ // Forbid copying and/or moving to avoid invalidating FileInfo pointers or
+ // FileManager references when destructing/moving.
+ FileManager(FileManager &&)                 = delete;
  FileManager(FileManager const &)            = delete;
  FileManager &operator=(FileManager &&)      = delete;
  FileManager &operator=(FileManager const &) = delete;
