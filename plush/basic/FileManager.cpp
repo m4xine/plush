@@ -1,12 +1,12 @@
 // SPDX-FileCopyrightText: Copyright (c) 2023, Maxine DeAndrade
 // SPDX-License-Identifier: BSD-3-Clause
 
-#include "basic/FileManager.h"
-
 #include <cstring>
 #include <fstream>
 #include <iostream>
 #include <sstream>
+
+#include "basic/FileManager.h"
 
 namespace plush {
 
@@ -16,14 +16,6 @@ FileInfo::FileInfo(std::filesystem::path &&filePath, std::string &&fileContent,
     mFileManagerRef {fileManagerRef} {}
 
 FileManager::FileManager() {}
-
-FileManager::FileManager(FileManager &&fileMgr)
-  : mLookupDirs {std::move(fileMgr.mLookupDirs)},
-    mFiles {std::move(fileMgr.mFiles)} {}
-
-FileManager::~FileManager() {
- for (auto fileInfo : mFiles) delete fileInfo;
-}
 
 void FileManager::addLookupDir(std::filesystem::path const &dirPath) {
  mLookupDirs.push_back(dirPath);
