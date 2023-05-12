@@ -17,6 +17,10 @@ FileInfo::FileInfo(std::filesystem::path &&filePath, std::string &&fileContent,
 
 FileManager::FileManager() {}
 
+FileManager::~FileManager() {
+ for (auto fileInfo : mFiles) delete fileInfo;
+}
+
 void FileManager::addLookupDir(std::filesystem::path const &dirPath) {
  mLookupDirs.push_back(dirPath);
 }
