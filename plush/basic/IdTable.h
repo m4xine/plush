@@ -37,7 +37,7 @@ public:
  // keyword.
  constexpr Keyword::Kind keywordKind() const { return *mOptKeywordKind; }
 
- constexpr bool isKeyword() const { return mOptKeywordKind; }
+ constexpr bool isKeyword() const { return mOptKeywordKind.has_value(); }
  constexpr bool isKeyword(Keyword::Kind kind) const {
   return isKeyword() && keywordKind() == kind;
  }
