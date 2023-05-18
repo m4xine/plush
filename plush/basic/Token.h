@@ -36,12 +36,12 @@ public:
  }
 
  template <class Kind>
- constexpr decltype(auto) get() {
+ [[nodiscard]] constexpr decltype(auto) get() {
   assert(is<Kind>());
   return *std::get_if<Kind>(&mKind);
  }
  template <class Kind>
- constexpr decltype(auto) get() const {
+ [[nodiscard]] constexpr decltype(auto) get() const {
   assert(is<Kind>());
   return *std::get_if<Kind>(&mKind);
  }
