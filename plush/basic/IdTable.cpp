@@ -8,8 +8,9 @@
 
 namespace plush {
 
-IdInfo::IdInfo(std::string                &&stringRep,
-               std::optional<Keyword::Kind> optKeywordKind, IdTable &idTableRef)
+IdInfo::IdInfo(std::string                            &&stringRep,
+               std::optional<enum token::Keyword::Kind> optKeywordKind,
+               IdTable                                 &idTableRef)
   : mStringRep {std::move(stringRep)}, mOptKeywordKind {optKeywordKind},
     mIdTableRef {idTableRef} {}
 
@@ -26,7 +27,7 @@ IdInfo *IdTable::add(IdInfo &&idInfo) {
 }
 
 void IdTable::addKeywords() {
- for (auto &kw : KEYWORDS)
+ for (auto &kw : token::KEYWORDS)
   add({std::string {kw.stringRep()}, {kw.kind()}, *this});
 }
 

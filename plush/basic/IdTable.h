@@ -11,11 +11,10 @@
 #include <string_view>
 #include <vector>
 
-#include "basic/Keyword.h"
+#include "basic/IdTable.fwd.h"
+#include "basic/TokenKinds.h"
 
 namespace plush {
-
-class IdTable;
 
 // Representation of a Plush identifier.
 class IdInfo final {
@@ -24,21 +23,24 @@ class IdInfo final {
  // String representation of the identifier.
  std::string mStringRep;
  // Is the identifier a keyword?
- std::optional<Keyword::Kind> mOptKeywordKind;
+ std::optional<enum token::Keyword::Kind> mOptKeywordKind;
  // Reference to the parent IdTable.
  [[maybe_unused]] IdTable &mIdTableRef;
 
- IdInfo(std::string &&stringRep, std::optional<Keyword::Kind> optKeywordKind,
-        IdTable &idTableRef);
+ IdInfo(std::string                            &&stringRep,
+        std::optional<enum token::Keyword::Kind> optKeywordKind,
+        IdTable                                 &idTableRef);
 
 public:
  constexpr std::string_view stringRep() const { return mStringRep; }
  // Retrieves the identifier's keyword kind. Fails if the identifier is not a
  // keyword.
- constexpr Keyword::Kind keywordKind() const { return *mOptKeywordKind; }
+ constexpr enum token::Keyword::Kind keywordKind() const {
+  return *mOptKeywordKind;
+ }
 
  constexpr bool isKeyword() const { return mOptKeywordKind.has_value(); }
- constexpr bool isKeyword(Keyword::Kind kind) const {
+ constexpr bool isKeyword(enum token::Keyword::Kind kind) const {
   return isKeyword() && keywordKind() == kind;
  }
 };
