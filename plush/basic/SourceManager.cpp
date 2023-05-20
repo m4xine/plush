@@ -25,12 +25,12 @@ SourceRegionInfo::SourceRegionInfo(SourceRegion const &srcRegion,
                                    SourceInfo         *sourceInfo)
   : SourceRegion {srcRegion}, mSourceInfoPtr {sourceInfo} {}
 
-std::string const &SourceInfo::sourceContent() const {
- if (auto file = std::get_if<File>(&mVariant))
+std::string_view SourceInfo::sourceContent() const {
+ if (auto file = std::get_if<File>(&mKind))
   return file->fileInfo->fileContent();
- else if (auto shell = std::get_if<Shell>(&mVariant))
+ else if (auto shell = std::get_if<Shell>(&mKind))
   return shell->input;
- else if (auto stdIn = std::get_if<StdIn>(&mVariant))
+ else if (auto stdIn = std::get_if<StdIn>(&mKind))
   return stdIn->input;
 
  assert(!"Unhandled variant");

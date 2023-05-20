@@ -6,6 +6,7 @@
 #ifndef PLUSH_BASIC_SOURCEMANAGER_H
 #define PLUSH_BASIC_SOURCEMANAGER_H
 
+#include <cassert>
 #include <string>
 #include <variant>
 #include <vector>
@@ -78,6 +79,7 @@ public:
 class SourceInfo final {
  friend class SourceManager;
 
+public:
  struct File {
   FileInfo *fileInfo;
  };
@@ -90,19 +92,33 @@ class SourceInfo final {
   std::string input;
  };
 
- std::variant<File, Shell, StdIn> mVariant;
+private:
+ std::variant<File, Shell, StdIn> mKind;
  // Reference to the parent SourceManager.
  SourceManager &mSourceManagerRef;
 
  constexpr SourceInfo(File &&file, SourceManager &srcMgrRef)
-   : mVariant {std::move(file)}, mSourceManagerRef {srcMgrRef} {}
+   : mKind {std::move(file)}, mSourceManagerRef {srcMgrRef} {}
  constexpr SourceInfo(Shell &&shell, SourceManager &srcMgrRef)
-   : mVariant {std::move(shell)}, mSourceManagerRef {srcMgrRef} {}
+   : mKind {std::move(shell)}, mSourceManagerRef {srcMgrRef} {}
  constexpr SourceInfo(StdIn &&stdIn, SourceManager &srcMgrRef)
-   : mVariant {std::move(stdIn)}, mSourceManagerRef {srcMgrRef} {}
+   : mKind {std::move(stdIn)}, mSourceManagerRef {srcMgrRef} {}
 
 public:
- std::string const &sourceContent() const;
+ // Checks if the provided source entity kind is present.
+ template <class Kind>
+ constexpr bool is() const {
+  return std::holds_alternative<Kind>(mKind);
+ }
+
+ // Retrieves the stored source entity kind. Fails if Kind is not present.
+ template <class Kind>
+ constexpr Kind const &get() const {
+  assert(is<Kind>());
+  return *std::get_if<Kind>(&mKind);
+ }
+
+ std::string_view sourceContent() const;
 
  // Create a SourceRegionInfo (managed by the parent SourceManager) with this
  // SourceInfo and the provided SourceRegion.
