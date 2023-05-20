@@ -23,6 +23,7 @@ class SourceManager;
 struct SourceLoc {
  std::size_t line, column;
 
+ constexpr SourceLoc() : line {0}, column {0} {}
  constexpr SourceLoc(std::size_t ln, std::size_t col)
    : line {ln}, column {col} {}
 
