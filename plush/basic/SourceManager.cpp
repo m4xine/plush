@@ -46,6 +46,19 @@ std::string_view SourceInfo::sourceContent() const {
  return mSourceManagerRef.makeSourceRegionInfo(srcRegion, this);
 }
 
+SourceInfo::ConstIterator SourceInfo::begin() const {
+ return sourceContent().cbegin();
+}
+SourceInfo::ConstIterator SourceInfo::cbegin() const {
+ return sourceContent().cbegin();
+}
+SourceInfo::ConstIterator SourceInfo::end() const {
+ return sourceContent().cend();
+}
+SourceInfo::ConstIterator SourceInfo::cend() const {
+ return sourceContent().cend();
+}
+
 [[nodiscard]] SourceInfo *SourceManager::addSourceInfo(SourceInfo &&srcInfo) {
  SourceInfo *newSrcInfo {new SourceInfo {std::move(srcInfo)}};
  mSources.push_back(newSrcInfo);

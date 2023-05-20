@@ -80,6 +80,8 @@ class SourceInfo final {
  friend class SourceManager;
 
 public:
+ using ConstIterator = std::string_view::const_iterator;
+
  struct File {
   FileInfo *fileInfo;
  };
@@ -127,6 +129,11 @@ public:
  // SourceInfo and the provided SourceRegion.
  [[nodiscard]] SourceRegionInfo *makeSourceRegionInfo(
    SourceRegion const &srcRegion);
+
+ ConstIterator begin() const;
+ ConstIterator cbegin() const;
+ ConstIterator end() const;
+ ConstIterator cend() const;
 };
 
 // Manages source entities and associated tracking information.
