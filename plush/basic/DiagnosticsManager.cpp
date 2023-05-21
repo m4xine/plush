@@ -60,19 +60,21 @@ void DiagnosticsManager::display() const {
  }
 }
 
-DiagnosticsManager::DiagnosticsManager() {}
+DiagnosticsManager::DiagnosticsManager(std::size_t errorLimit)
+  : mErrorLimit {errorLimit} {}
 
-bool DiagnosticsManager::status() const {
+bool DiagnosticsManager::errorLimitReached() const {
+ std::size_t count {0};
  for (auto &diag : mDiagnostics)
-  if (diag->level() >= Diagnostic::ERROR) return true;
- return false;
+  if (diag->level() >= Diagnostic::ERROR) ++count;
+ return count >= mErrorLimit;
 }
 
 bool DiagnosticsManager::dump() {
- bool ok {status()};
+ bool bad {errorLimitReached()};
  display();
  mDiagnostics.clear();
- return ok;
+ return bad;
 }
 
 } // namespace plush

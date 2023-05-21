@@ -47,6 +47,10 @@ public:
 
 // Manages diagnostics and displaying them to the user.
 class DiagnosticsManager {
+ // Maximum error limit. Compiler termination is recommended upon reaching this
+ // number.
+ std::size_t const mErrorLimit;
+
  // Contains every added Diagnostic derivative.
  std::vector<Diagnostic::UPtr> mDiagnostics;
 
@@ -54,7 +58,7 @@ class DiagnosticsManager {
  void display() const;
 
 public:
- DiagnosticsManager();
+ DiagnosticsManager(std::size_t errorLimit = 1);
  DiagnosticsManager(DiagnosticsManager &&)                 = delete;
  DiagnosticsManager(DiagnosticsManager const &)            = delete;
  DiagnosticsManager &operator=(DiagnosticsManager &&)      = delete;
@@ -68,11 +72,11 @@ public:
     std::make_unique<std::decay_t<Derived>>(std::forward<Derived>(derived)));
  }
 
- // Checks if this diagnostic manager contains a diagnostic of considerable
- // severity.
- bool status() const;
+ // Checks if the error limit was reached.
+ bool errorLimitReached() const;
 
- // Displays and clears every stored diagnostic.
+ // Displays and clears every stored diagnostic. Returns true if the error limit
+ // was reached.
  bool dump();
 };
 
