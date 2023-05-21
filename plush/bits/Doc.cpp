@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: BSD-3-Clause
 
 #include "bits/Doc.h"
+#include "bits/utf8.h"
 
 namespace plush {
 
@@ -15,6 +16,14 @@ std::string DocBase::toString(DocStyle const &style) const {
  std::ostringstream oss;
  render(style, oss);
  return oss.str();
+}
+
+Char::Char(char32_t char_) : mChar {char_} {}
+
+Char char_(char32_t char_) { return {char_}; }
+
+void Char::render(DocStyle const &style, std::ostringstream &oss) const {
+ utf8::operator<<(oss, mChar);
 }
 
 Text::Text(std::string &&text) : mText {std::move(text)} {}

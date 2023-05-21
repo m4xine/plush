@@ -39,6 +39,19 @@ public:
  std::string toString(DocStyle const &style) const;
 };
 
+// Character document.
+class Char : public DocBase {
+ char32_t mChar;
+
+public:
+ Char(char32_t char_);
+
+ virtual void render(DocStyle const     &style,
+                     std::ostringstream &oss) const override;
+};
+
+Char char_(char32_t char_);
+
 // Text document.
 class Text : public DocBase {
  std::string mText;
