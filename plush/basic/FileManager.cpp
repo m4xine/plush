@@ -42,14 +42,14 @@ void FileManager::addLookupDir(std::filesystem::path const &dirPath) {
 
  if (!std::filesystem::exists(filePath)) {
   // No file could be found, return an error with the attempted paths.
-  std::vector<std::filesystem::path> triedPaths;
+  std::vector<std::filesystem::path> triedPaths {filePath};
   for (auto &lookupDir : mLookupDirs)
    triedPaths.push_back(lookupDir / filePath);
 
   std::ostringstream oss;
   oss << "Couldn't open file, attempted paths: ";
   for (auto it = triedPaths.begin(); it != triedPaths.end(); ++it)
-   oss << *it << ((it != triedPaths.end()) ? ", " : "");
+   oss << ((it != triedPaths.begin()) ? ", " : "") << *it;
   return BasicError {oss.str()};
  }
 
