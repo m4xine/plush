@@ -12,11 +12,12 @@
 #include <variant>
 
 #include "bits/Error.h"
+#include "bits/Unit.h"
 
 namespace plush {
 
 // Tagged union holding a success value or an error.
-template <class Success>
+template <class Success = Unit>
 class Expect {
  // Either Success or a derivative of Error.
  std::variant<Success, std::unique_ptr<Error>> mVariant;
@@ -54,11 +55,11 @@ public:
  constexpr Success const &&success() const && { return *successPtr(); }
 
  // Take ownership of the contained error value.
- template <class E = Error>
- [[nodiscard]] std::enable_if_t<std::is_base_of_v<Error, E>, std::unique_ptr<E>>
- takeError() {
+ template <class E>
+ [[nodiscard]] std::enable_if_t<std::is_base_of_v<Error, E>, E> takeError() {
   assert(isError());
-  return *std::get_if<std::unique_ptr<Error>>(&mVariant);
+  return *dynamic_cast<E *>(
+    std::get_if<std::unique_ptr<Error>>(&mVariant)->release());
  }
 
  constexpr operator bool() const { return isSuccess(); }
@@ -67,8 +68,8 @@ public:
  constexpr Success const  &operator*() const  &{ return success(); }
  constexpr Success       &&operator*()       &&{ return success(); }
  constexpr Success const &&operator*() const && { return success(); }
- constexpr Success        *operator->() { return successPtr(); }
- constexpr Success const  *operator->() const { return successPtr(); }
+ constexpr Success        &operator->() { return success(); }
+ constexpr Success const  &operator->() const { return success(); }
 };
 
 } // namespace plush
