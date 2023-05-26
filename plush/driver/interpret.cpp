@@ -1,3 +1,6 @@
+// SPDX-FileCopyrightText: Copyright (c) 2023, Maxine DeAndrade
+// SPDX-License-Identifier: BSD-3-Clause
+
 #include "basic/IdTable.h"
 #include "basic/SourceManager.h"
 #include "driver/interpret.h"
