@@ -36,6 +36,29 @@ void Text::render(DocStyle const &style, std::ostringstream &oss) const {
 Text text(std::string &&text) { return {std::move(text)}; }
 Text text(std::string const &text) { return {text}; }
 
+Integer::Integer(std::intmax_t i) : mStringRep {std::to_string(i)} {}
+Integer::Integer(std::uintmax_t i) : mStringRep {std::to_string(i)} {}
+
+void Integer::render(DocStyle const &style, std::ostringstream &oss) const {
+ oss << mStringRep;
+}
+
+Integer integer(std::intmax_t i) { return {i}; }
+Integer integer(std::uintmax_t i) { return {i}; }
+
+StringLiteral::StringLiteral(std::string &&string)
+  : mString {std::move(string)} {}
+StringLiteral::StringLiteral(std::string const &string)
+  : mString {std::move(string)} {}
+
+void StringLiteral::render(DocStyle const     &style,
+                           std::ostringstream &oss) const {
+ oss << '"' << mString << '"';
+}
+
+StringLiteral stringLit(std::string &&string) { return {std::move(string)}; }
+StringLiteral stringLit(std::string const &text) { return {text}; }
+
 Colon::Colon() {}
 
 void Colon::render(DocStyle const &style, std::ostringstream &oss) const {
@@ -63,7 +86,14 @@ void HPadding::render(DocStyle const &style, std::ostringstream &oss) const {
 HPadding hpad(std::size_t count) { return {count}; }
 
 void Docs::render(DocStyle const &style, std::ostringstream &oss) const {
- for (auto &doc : mDocs) doc->render(style, oss);
+ for (auto &doc : docs()) doc->render(style, oss);
+}
+
+void List::render(DocStyle const &style, std::ostringstream &oss) const {
+ for (auto it = docs().begin(); it < docs().end(); ++it) {
+  if (it != docs().begin()) oss << style.listSeperator;
+  (*it)->render(style, oss);
+ }
 }
 
 } // namespace doc
