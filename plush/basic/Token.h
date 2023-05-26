@@ -11,6 +11,7 @@
 
 #include "basic/SourceManager.h"
 #include "basic/TokenKinds.h"
+#include "bits/Doc.h"
 
 namespace plush {
 
@@ -45,6 +46,8 @@ public:
   assert(is<Kind>());
   return *std::get_if<Kind>(&mKind);
  }
+
+ Doc doc() const;
 };
 
 } // namespace plush
