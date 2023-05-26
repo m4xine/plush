@@ -11,6 +11,7 @@
 
 namespace plush::driver {
 
+// Runs Plush as an interpreter with the provided options.
 Expect<> interpret(Options const &options);
 
 } // namespace plush::driver
