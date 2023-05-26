@@ -40,8 +40,9 @@ void DiagnosticsManager::display() const {
 
    d += text(Diagnostic::levelToString(level));
 
-   if (SourceInfo *srcInfo = diag->sourceInfo(); srcInfo) {
+   if (SourceInfo *srcInfo = diag->sourceInfo()) {
     d += hpad() + lparen;
+
     if (srcInfo->is<SourceInfo::File>())
      d += text(srcInfo->get<SourceInfo::File>().fileInfo->filePath().string());
     else if (srcInfo->is<SourceInfo::Shell>())
@@ -49,7 +50,12 @@ void DiagnosticsManager::display() const {
     else if (srcInfo->is<SourceInfo::StdIn>())
      d += text("stdin");
     else
-     assert(!"Unhandled variant");
+     assert(!"Unhandled kind");
+
+    if (auto region = diag->sourceRegion())
+     d += colon + integer(region->beginLoc().line + 1) + colon +
+          integer(region->beginLoc().column + 1);
+
     d += rparen;
    }
 
