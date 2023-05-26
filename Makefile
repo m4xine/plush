@@ -6,9 +6,12 @@ BINARY		:=plush
 SOURCEDIR	:=plush
 INCLUDEDIR	:=plush
 BUILDDIR	:=build
+TESTDIR		:=test
 HEADERS		:=$(shell find $(SOURCEDIR) -name '*.h')
 SOURCES		:=$(shell find $(SOURCEDIR) -name '*.cpp')
+TESTSOURCES	:=$(wildcard $(TESTDIR)/*.cpp)
 OBJECTS		:=$(patsubst $(SOURCEDIR)/%,$(BUILDDIR)/%,$(SOURCES:.cpp=.o))
+TESTBINARIES	:=$(TESTSOURCES:.cpp=.o)
 
 debug:		CXXFLAGS+=-DDEBUG -g
 debug:		build
@@ -24,11 +27,18 @@ $(BUILDDIR)/$(BINARY): $(OBJECTS)
 
 build: $(BUILDDIR)/$(BINARY)
 
+$(TESTDIR)/%.o: $(TESTDIR)/%.cpp $(SOURCES)
+	$(CXX) -DPLUSH_NOMAIN $(CXXFLAGS) $(LDFLAGS) -I$(INCLUDEDIR) $(SOURCES) $< -o $@
+
+tests: CXXFLAGS+=-DDEBUG -g
+tests: $(TESTBINARIES)
+
 format:
 	$(CLANGFORMAT) -i -style=file $(HEADERS) $(SOURCES)
 
 clean:
-	@rm -r $(BUILDDIR)
+	@rm -rf $(BUILDDIR)
+	@rm -f $(TESTBINARIES)
 
 install: release
 	@cp $(BUILDDIR)/$(BINARY) $(DESTDIR)/usr/local/bin/$(BINARY)
